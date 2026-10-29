@@ -1,63 +1,82 @@
 
-import { Settings as SettingsIcon, ShieldCheck, Database, Bell } from "lucide-react";
+import { useState } from "react";
+
+import SettingsHeader from "../components/settings/SettingsHeader";
+import SettingsActions from "../components/settings/SettingsActions";
+import SystemHealthCard from "../components/settings/SystemHealthCard";
+import AlertPreferences from "../components/settings/AlertPreferences";
+import DashboardPreferences from "../components/settings/DashboardPreferences";
+import DetectionSettings from "../components/settings/DetectionSettings";
+
+import useSettings from "../hooks/useSettings";
+import useSystemHealth from "../hooks/useSystemHealth";
 
 function Settings() {
-  return (
-    <section>
-      <div className="flex items-center gap-3">
-        <div className="rounded-xl border border-teal-300/20 bg-teal-300/10 p-3 text-teal-300">
-          <SettingsIcon size={24} />
-        </div>
+  const {
+    settings,
+    saved,
+    updateSetting,
+    saveSettings,
+    resetSettings,
+  } = useSettings();
 
-        <div>
-          <p className="text-xs tracking-widest text-teal-300">
-            CONFIGURATION
-          </p>
-          <h1 className="mt-1 text-2xl font-semibold text-white">
-            Settings
-          </h1>
-        </div>
+  const { health, checking, checkConnection } = useSystemHealth();
+  const [saveError, setSaveError] = useState("");
+
+  async function handleSave() {
+    setSaveError("");
+
+    try {
+      await saveSettings();
+    } catch (error) {
+      setSaveError(
+        error.response?.data?.message ||
+        error.message ||
+        "Could not save settings."
+      );
+    }
+  }
+
+
+  function handleReset() {
+    resetSettings();
+    setSaveError("");
+  }
+
+  return (
+    <section className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <SettingsHeader />
+
+        <SettingsActions
+          onSave={handleSave}
+          onReset={handleReset}
+          saved={saved}
+          saveError={saveError}
+        />
       </div>
 
-      <p className="mt-4 text-sm text-slate-400">
-        Review your NetSentry AI workspace configuration.
-      </p>
+      <div className="grid gap-4 xl:grid-cols-2">
+        <SystemHealthCard
+          health={health}
+          checking={checking}
+          onCheck={checkConnection}
+        />
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-5">
-          <Database size={21} className="text-teal-300" />
-          <h2 className="mt-4 text-sm font-medium text-white">
-            Backend connection
-          </h2>
-          <p className="mt-2 text-xs leading-5 text-slate-500">
-            API endpoint: http://localhost:5000
-          </p>
-          <p className="mt-2 text-[11px] text-slate-500">
-            Connection status will be verified through an API request.
-          </p>
-        </div>
+        <AlertPreferences
+          settings={settings}
+          updateSetting={updateSetting}
+        />
 
-        <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-5">
-          <ShieldCheck size={21} className="text-indigo-300" />
-          <h2 className="mt-4 text-sm font-medium text-white">
-            Security configuration
-          </h2>
-          <p className="mt-2 text-xs leading-5 text-slate-500">
-            Authentication and access control will be configured in a later
-            development phase.
-          </p>
-        </div>
+        <DashboardPreferences
+          settings={settings}
+          updateSetting={updateSetting}
+        />
 
-        <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-5">
-          <Bell size={21} className="text-amber-300" />
-          <h2 className="mt-4 text-sm font-medium text-white">
-            Alert preferences
-          </h2>
-          <p className="mt-2 text-xs leading-5 text-slate-500">
-            Notification preferences will be added when alert management is
-            implemented.
-          </p>
-        </div>
+        <DetectionSettings
+          settings={settings}
+          updateSetting={updateSetting}
+        />
       </div>
     </section>
   );

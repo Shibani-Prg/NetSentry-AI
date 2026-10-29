@@ -8,54 +8,53 @@ import {
 } from "lucide-react";
 import api from "../services/api";
 
+async function getDetections() {
+  const response = await api.get("/api/detections/failed-logins");
+
+  if (!Array.isArray(response.data.detections)) {
+    throw new Error("Unexpected response from detections API.");
+  }
+
+  return response.data.detections;
+}
+
 function Detections() {
   const [detections, setDetections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
-  async function fetchDetections(isRefresh = false) {
-    if (isRefresh) {
-      setRefreshing(true);
-    }
-
-    setError("");
-
-    try {
-      const response = await api.get("/api/detections/failed-logins");
-
-      if (!Array.isArray(response.data.detections)) {
-        throw new Error("Unexpected response from detections API.");
-      }
-
-      setDetections(response.data.detections);
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Unable to load detections."
-      );
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+ async function fetchDetections(isRefresh = false) {
+  if (isRefresh) {
+    setRefreshing(true);
   }
 
-  useEffect(() => {
+  setError("");
+
+  try {
+    const data = await getDetections();
+    setDetections(data);
+  } catch (err) {
+    setError(
+      err.response?.data?.message ||
+        err.message ||
+        "Unable to load detections."
+    );
+  } finally {
+    setLoading(false);
+    setRefreshing(false);
+  }
+}
+
+useEffect(() => {
   let ignore = false;
 
   async function loadDetections() {
-    setError("");
-
     try {
-      const response = await api.get("/api/detections/failed-logins");
-
-      if (!Array.isArray(response.data.detections)) {
-        throw new Error("Unexpected response from detections API.");
-      }
+      const data = await getDetections();
 
       if (!ignore) {
-        setDetections(response.data.detections);
+        setDetections(data);
       }
     } catch (err) {
       if (!ignore) {
