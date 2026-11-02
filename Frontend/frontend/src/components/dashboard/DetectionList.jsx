@@ -20,31 +20,32 @@ function DetectionList({ detections = [] }) {
   };
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-[#101722] p-5">
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold text-white">
+    <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-[#101722] p-4 sm:p-5">
+      <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className="text-base font-semibold text-white sm:text-lg">
             Failed Login Detections
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
             Suspicious sources identified by the backend
           </p>
         </div>
 
-        <span className="rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-300">
+        <span className="shrink-0 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-300">
           {detections.length} detected
         </span>
       </div>
 
       {detections.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-800 py-10 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-800 px-4 py-10 text-center">
           <ShieldAlert className="mb-3 h-8 w-8 text-slate-600" />
 
           <p className="text-sm font-medium text-slate-300">
             No failed-login detections returned
           </p>
 
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 max-w-sm text-xs text-slate-500">
             Detection results will appear when the backend reports suspicious sources.
           </p>
         </div>
@@ -58,10 +59,10 @@ function DetectionList({ detections = [] }) {
             return (
               <div
                 key={`${ip}-${index}`}
-                className="flex flex-col gap-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 transition-colors hover:border-slate-700 sm:flex-row sm:items-center sm:justify-between"
+                className="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 transition-colors hover:border-slate-700 sm:flex-row sm:items-center sm:justify-between sm:p-4"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <div className="rounded-lg bg-rose-500/10 p-2.5">
+                  <div className="shrink-0 rounded-lg bg-rose-500/10 p-2.5">
                     <Network className="h-5 w-5 text-rose-400" />
                   </div>
 
@@ -70,21 +71,23 @@ function DetectionList({ detections = [] }) {
                       {ip}
                     </p>
 
-                    <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-                      <Activity className="h-3.5 w-3.5" />
+                    <p className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                      <Activity className="h-3.5 w-3.5 shrink-0" />
                       Failed authentication attempts
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 sm:justify-end">
+                <div className="flex min-w-0 items-center justify-between gap-2 sm:justify-end sm:gap-3">
                   <span
-                    className={`rounded-md border px-2.5 py-1 text-xs font-semibold ${severityStyles[severity]}`}
+                    className={`shrink-0 rounded-md border px-2.5 py-1 text-xs font-semibold ${
+                      severityStyles[severity]
+                    }`}
                   >
                     {severity}
                   </span>
 
-                  <span className="whitespace-nowrap text-sm font-semibold text-white">
+                  <span className="whitespace-nowrap text-xs font-semibold text-white sm:text-sm">
                     {attempts.toLocaleString("en-IN")} attempts
                   </span>
                 </div>

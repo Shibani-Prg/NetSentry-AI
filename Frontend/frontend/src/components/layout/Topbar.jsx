@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Bell, Search, ShieldCheck } from "lucide-react";
+import { Bell, Search, ShieldCheck, Menu } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import api from "../../services/api";
@@ -16,7 +17,7 @@ const pageNames = {
   "/settings": "Settings",
 };
 
-function Topbar() {
+function Topbar({ onMenuClick }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -56,15 +57,29 @@ function Topbar() {
   return (
     <>
       <header className="sticky top-0 z-30 flex min-h-[68px] w-full min-w-0 items-center justify-between gap-2 border-b border-white/[0.07] bg-[#090d14]/95 px-3 py-3 backdrop-blur-xl sm:min-h-[76px] sm:gap-4 sm:px-5 md:px-7">
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-[10px] text-slate-500 sm:text-xs">
-            NetSentry AI / Workspace
-          </p>
-          <h2 className="mt-1 truncate text-sm font-semibold text-white sm:text-base md:text-lg">
-            {title}
-          </h2>
+
+        {/* Page title and mobile menu */}
+        <div className="flex min-w-0 flex-1 items-center gap-3">
+          <button
+            type="button"
+            onClick={onMenuClick}
+            aria-label="Open navigation menu"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] text-slate-300 transition hover:bg-white/[0.05] hover:text-teal-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 lg:hidden"
+          >
+            <Menu size={20} />
+          </button>
+
+          <div className="min-w-0">
+            <p className="truncate text-[10px] text-slate-500 sm:text-xs">
+              NetSentry AI / Workspace
+            </p>
+            <h2 className="mt-1 truncate text-sm font-semibold text-white sm:text-base md:text-lg">
+              {title}
+            </h2>
+          </div>
         </div>
 
+        {/* Header actions */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           <button
             type="button"

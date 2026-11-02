@@ -1,17 +1,29 @@
 
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar.jsx";
 import Topbar from "./Topbar.jsx";
 
 function DashboardLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  function closeSidebar() {
+    setSidebarOpen(false);
+  }
+
   return (
     <div className="min-h-screen bg-[#090d14] text-slate-200">
-      <Sidebar />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={closeSidebar}
+      />
 
       <div className="min-h-screen lg:ml-[245px]">
-        <Topbar />
+        <Topbar
+          onMenuClick={() => setSidebarOpen(true)}
+        />
 
-        <main className="p-4 sm:p-7">
+        <main className="min-w-0 p-4 sm:p-7">
           <Outlet />
         </main>
       </div>

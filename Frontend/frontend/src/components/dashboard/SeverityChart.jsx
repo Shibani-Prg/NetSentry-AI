@@ -25,25 +25,30 @@ function SeverityChart({ events = [] }) {
     ).length,
   }));
 
+  const chartData = data.filter((item) => item.value > 0);
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-[#101722] p-5 transition-colors hover:border-slate-700">
-      <div className="mb-5">
-        <h2 className="text-lg font-semibold text-white">
+    <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-[#101722] p-4 transition-colors hover:border-slate-700 sm:p-5">
+      {/* Header */}
+      <div className="mb-4 sm:mb-5">
+        <h2 className="text-base font-semibold text-white sm:text-lg">
           Events by Severity
         </h2>
-        <p className="mt-1 text-sm text-slate-400">
+
+        <p className="mt-1 text-xs text-slate-400 sm:text-sm">
           Distribution of recorded security events
         </p>
       </div>
 
-      <div className="h-64">
+      {/* Chart */}
+      <div className="h-64 min-w-0 w-full sm:h-64">
         {total === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
             <p className="text-sm font-medium text-slate-300">
               No severity data available
             </p>
+
             <p className="text-xs text-slate-500">
               Severity distribution will appear when events are recorded.
             </p>
@@ -52,41 +57,40 @@ function SeverityChart({ events = [] }) {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={data.filter((item) => item.value > 0)}
+                data={chartData}
                 dataKey="value"
                 nameKey="name"
                 cx="50%"
-                cy="45%"
-                outerRadius={82}
-                innerRadius={56}
+                cy="43%"
+                outerRadius="65%"
+                innerRadius="43%"
                 paddingAngle={4}
                 stroke="none"
               >
-                {data
-                  .filter((item) => item.value > 0)
-                  .map((entry) => (
-                    <Cell key={entry.name} fill={entry.color} />
-                  ))}
+                {chartData.map((entry) => (
+                  <Cell key={entry.name} fill={entry.color} />
+                ))}
               </Pie>
 
+              {/* Center label */}
               <text
                 x="50%"
-                y="41%"
+                y="39%"
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#94a3b8"
-                fontSize={11}
+                fontSize={10}
               >
                 TOTAL EVENTS
               </text>
 
               <text
                 x="50%"
-                y="51%"
+                y="49%"
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#f8fafc"
-                fontSize={22}
+                fontSize={21}
                 fontWeight={600}
               >
                 {total.toLocaleString("en-IN")}
@@ -100,17 +104,21 @@ function SeverityChart({ events = [] }) {
                   color: "#f8fafc",
                   fontSize: "12px",
                 }}
-                formatter={(value, name) => [
-                  value,
-                  name,
-                ]}
+                formatter={(value, name) => [value, name]}
               />
 
               <Legend
                 verticalAlign="bottom"
+                align="center"
                 iconType="circle"
+                iconSize={7}
+                wrapperStyle={{
+                  fontSize: "10px",
+                  paddingTop: "5px",
+                  width: "100%",
+                }}
                 formatter={(value) => (
-                  <span style={{ color: "#cbd5e1", fontSize: 12 }}>
+                  <span style={{ color: "#cbd5e1", fontSize: 10 }}>
                     {value}
                   </span>
                 )}

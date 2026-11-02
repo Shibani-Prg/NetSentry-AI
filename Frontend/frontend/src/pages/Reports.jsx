@@ -3,17 +3,18 @@ import { useState } from "react";
 import {
   Activity,
   AlertTriangle,
-  Download,
-  FileText,
   ShieldAlert,
   ShieldCheck,
 } from "lucide-react";
 
 import { useSecurityReport } from "../hooks/userSecurityReport.js";
-import ReportStatCard from "../components/reports/ReportStatCard";
-import ReportFilters from "../components/reports/ReportFilters";
-import SeverityBreakdown from "../components/reports/SeverityBreakdown";
-import ReportEventsTable from "../components/reports/ReportEventsTable";
+
+import ReportHeader from "../components/reports/ReportHeader.jsx";
+import ReportDetails from "../components/reports/ReportDetails.jsx";
+import ReportStatCard from "../components/reports/ReportStatCard.jsx";
+import ReportFilters from "../components/reports/ReportFilters.jsx";
+import SeverityBreakdown from "../components/reports/SeverityBreakdown.jsx";
+import ReportEventsTable from "../components/reports/ReportEventsTable.jsx";
 
 function escapeCsv(value) {
   return `"${String(value ?? "").replace(/"/g, '""')}"`;
@@ -30,6 +31,7 @@ function Reports() {
   const severityBreakdown = report?.severityBreakdown ?? [];
   const totalEvents = Number(summary.total_events ?? 0);
 
+  // Summary statistics
   const stats = [
     {
       title: "Total Events",
@@ -39,24 +41,25 @@ function Reports() {
     },
     {
       title: "Critical Events",
-      value: summary.critical_events,
+      value: summary.critical_events ?? 0,
       icon: ShieldAlert,
       color: "text-red-400",
     },
     {
       title: "High Severity",
-      value: summary.high_events,
+      value: summary.high_events ?? 0,
       icon: AlertTriangle,
       color: "text-orange-300",
     },
     {
       title: "Failed Logins",
-      value: summary.failed_logins,
+      value: summary.failed_logins ?? 0,
       icon: ShieldCheck,
       color: "text-teal-300",
     },
   ];
 
+  // CSV Export
   function downloadCsv() {
     if (!report) return;
 
@@ -102,32 +105,16 @@ function Reports() {
   }
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <FileText size={23} className="text-indigo-400" />
-            <h1 className="text-2xl font-semibold text-white">
-              Security Reports
-            </h1>
-          </div>
+    <section className="min-w-0 space-y-5 sm:space-y-6">
 
-          <p className="mt-2 text-sm text-slate-400">
-            Analyze security events and export reports from NetSentry AI.
-          </p>
-        </div>
+      {/* Header */}
+      <ReportHeader
+        loading={loading}
+        reportAvailable={!!report}
+        onDownload={downloadCsv}
+      />
 
-        <button
-          type="button"
-          onClick={downloadCsv}
-          disabled={!report || loading}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <Download size={17} />
-          Download CSV
-        </button>
-      </div>
-
+      {/* Filters */}
       <ReportFilters
         range={range}
         onRangeChange={setRange}
@@ -135,8 +122,9 @@ function Reports() {
         loading={loading}
       />
 
+      {/* Error */}
       {error && (
-        <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3 sm:p-4">
           <p className="font-medium text-red-400">
             Unable to load security report
           </p>
@@ -148,85 +136,58 @@ function Reports() {
           <button
             type="button"
             onClick={refresh}
-            className="mt-3 rounded-lg border border-red-500/20 px-3 py-2 text-sm text-red-300 hover:bg-red-500/10"
+            className="mt-3 rounded-lg border border-red-500/20 px-3 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
           >
             Try Again
           </button>
         </div>
       )}
 
+      {/* Initial Loading */}
       {loading && !report && (
-        <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-10 text-center">
+        <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-8 text-center sm:p-10">
           <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
+
           <p className="mt-4 text-sm text-slate-400">
             Loading security report...
           </p>
         </div>
       )}
 
+      {/* Report Content */}
       {!error && report && (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {/* Statistics */}
+          <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
             {stats.map((stat) => (
-              <ReportStatCard key={stat.title} {...stat} />
+              <ReportStatCard
+                key={stat.title}
+                {...stat}
+              />
             ))}
           </div>
 
-          <div className="grid gap-5 xl:grid-cols-2">
+          {/* Severity and Details */}
+          <div className="grid min-w-0 gap-4 xl:grid-cols-2 sm:gap-5">
+
             <SeverityBreakdown
               items={severityBreakdown}
               total={totalEvents}
             />
 
-            <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-5">
-              <h3 className="font-semibold text-white">
-                Report Details
-              </h3>
+            <ReportDetails
+              range={range}
+              events={events}
+              generatedAt={report.generatedAt}
+            />
 
-              <p className="mt-1 text-sm text-slate-500">
-                Metadata for this report
-              </p>
-
-              <div className="mt-5 space-y-4">
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm text-slate-400">
-                    Selected period
-                  </span>
-                  <span className="text-sm font-medium text-white">
-                    {range === "24h"
-                      ? "Last 24 Hours"
-                      : range === "7d"
-                        ? "Last 7 Days"
-                        : "Last 30 Days"}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm text-slate-400">
-                    Records returned
-                  </span>
-                  <span className="text-sm font-medium text-white">
-                    {events.length.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm text-slate-400">
-                    Report generated
-                  </span>
-                  <span className="text-right text-sm text-white">
-                    {report.generatedAt
-                      ? new Date(report.generatedAt).toLocaleString()
-                      : "—"}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
 
+          {/* Events Table */}
           <ReportEventsTable events={events} />
         </>
       )}
+
     </section>
   );
 }

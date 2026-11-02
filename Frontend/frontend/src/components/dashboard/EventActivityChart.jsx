@@ -44,28 +44,32 @@ function EventActivityChart({ events = [] }) {
   );
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-[#101722] p-5 transition-colors hover:border-slate-700">
-      <div className="mb-6 flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold text-white">
+    <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-[#101722] p-4 transition-colors hover:border-slate-700 sm:p-5">
+      {/* Header */}
+      <div className="mb-5 flex flex-wrap items-start justify-between gap-3 sm:mb-6">
+        <div className="min-w-0">
+          <h2 className="text-base font-semibold text-white sm:text-lg">
             Security Event Activity
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
             Events recorded per day
           </p>
         </div>
 
-        <span className="rounded-lg border border-cyan-400/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-300">
+        <span className="shrink-0 rounded-lg border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1.5 text-[10px] font-medium text-cyan-300 sm:px-3 sm:text-xs">
           {events.length.toLocaleString("en-IN")} events
         </span>
       </div>
 
-      <div className="h-64">
+      {/* Chart */}
+      <div className="h-56 min-w-0 w-full sm:h-64">
         {data.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+          <div className="flex h-full flex-col items-center justify-center gap-2 px-2 text-center">
             <p className="text-sm font-medium text-slate-300">
               No event activity available
             </p>
+
             <p className="text-xs text-slate-500">
               Activity will appear when timestamped events are available.
             </p>
@@ -74,7 +78,7 @@ function EventActivityChart({ events = [] }) {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
-              margin={{ top: 8, right: 8, left: -18, bottom: 0 }}
+              margin={{ top: 8, right: 5, left: -22, bottom: 0 }}
             >
               <defs>
                 <linearGradient
@@ -89,6 +93,7 @@ function EventActivityChart({ events = [] }) {
                     stopColor="#38bdf8"
                     stopOpacity={0.35}
                   />
+
                   <stop
                     offset="95%"
                     stopColor="#38bdf8"
@@ -105,17 +110,19 @@ function EventActivityChart({ events = [] }) {
 
               <XAxis
                 dataKey="date"
-                tick={{ fill: "#94a3b8", fontSize: 11 }}
+                tick={{ fill: "#94a3b8", fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}
-                minTickGap={20}
+                minTickGap={25}
+                interval="preserveStartEnd"
               />
 
               <YAxis
                 allowDecimals={false}
-                tick={{ fill: "#94a3b8", fontSize: 11 }}
+                tick={{ fill: "#94a3b8", fontSize: 10 }}
                 axisLine={false}
                 tickLine={false}
+                width={30}
               />
 
               <Tooltip
@@ -126,7 +133,10 @@ function EventActivityChart({ events = [] }) {
                   color: "#f8fafc",
                   fontSize: "12px",
                 }}
-                labelStyle={{ color: "#94a3b8", marginBottom: "4px" }}
+                labelStyle={{
+                  color: "#94a3b8",
+                  marginBottom: "4px",
+                }}
                 formatter={(value) => [value, "Events"]}
               />
 

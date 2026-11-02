@@ -24,75 +24,76 @@ function Detections() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
- async function fetchDetections(isRefresh = false) {
-  if (isRefresh) {
-    setRefreshing(true);
-  }
+  async function fetchDetections(isRefresh = false) {
+    if (isRefresh) {
+      setRefreshing(true);
+    }
 
-  setError("");
+    setError("");
 
-  try {
-    const data = await getDetections();
-    setDetections(data);
-  } catch (err) {
-    setError(
-      err.response?.data?.message ||
-        err.message ||
-        "Unable to load detections."
-    );
-  } finally {
-    setLoading(false);
-    setRefreshing(false);
-  }
-}
-
-useEffect(() => {
-  let ignore = false;
-
-  async function loadDetections() {
     try {
       const data = await getDetections();
-
-      if (!ignore) {
-        setDetections(data);
-      }
+      setDetections(data);
     } catch (err) {
-      if (!ignore) {
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "Unable to load detections."
-        );
-      }
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Unable to load detections."
+      );
     } finally {
-      if (!ignore) {
-        setLoading(false);
-      }
+      setLoading(false);
+      setRefreshing(false);
     }
   }
 
-  loadDetections();
+  useEffect(() => {
+    let ignore = false;
 
-  return () => {
-    ignore = true;
-  };
-}, []);
+    async function loadDetections() {
+      try {
+        const data = await getDetections();
+
+        if (!ignore) {
+          setDetections(data);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setError(
+            err.response?.data?.message ||
+              err.message ||
+              "Unable to load detections."
+          );
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadDetections();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return (
-    <section className="space-y-6">
-      {/* Page heading */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl border border-rose-400/20 bg-rose-400/10 p-3 text-rose-300">
+    <section className="min-w-0 space-y-5 sm:space-y-6">
+
+      {/* Page Heading */}
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="shrink-0 rounded-xl border border-rose-400/20 bg-rose-400/10 p-2.5 text-rose-300 sm:p-3">
             <ShieldAlert size={24} />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <p className="text-xs tracking-widest text-teal-300">
               THREAT MONITORING
             </p>
 
-            <h1 className="mt-1 text-2xl font-semibold text-white">
+            <h1 className="mt-1 text-xl font-semibold text-white sm:text-2xl">
               Threat Detections
             </h1>
           </div>
@@ -102,7 +103,7 @@ useEffect(() => {
           type="button"
           onClick={() => fetchDetections(true)}
           disabled={loading || refreshing}
-          className="flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2.5 text-sm text-slate-200 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
         >
           <RefreshCw
             size={16}
@@ -117,15 +118,15 @@ useEffect(() => {
         IP addresses identified by your detection rules.
       </p>
 
-      {/* Detection summary */}
-      <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-6">
-        <div className="flex items-center justify-between">
-          <div>
+      {/* Detection Summary */}
+      <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-4 sm:p-6">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
             <p className="text-sm text-slate-400">
               Active detections
             </p>
 
-            <p className="mt-2 text-3xl font-semibold text-white">
+            <p className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
               {loading ? "—" : detections.length}
             </p>
 
@@ -134,20 +135,20 @@ useEffect(() => {
             </p>
           </div>
 
-          <div className="rounded-xl border border-rose-400/20 bg-rose-400/10 p-3 text-rose-300">
+          <div className="shrink-0 rounded-xl border border-rose-400/20 bg-rose-400/10 p-2.5 text-rose-300 sm:p-3">
             <Activity size={26} />
           </div>
         </div>
       </div>
 
-      {/* Detection results */}
-      <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-[#10151e]">
-        <div className="border-b border-white/[0.08] p-5">
+      {/* Detection Results */}
+      <div className="min-w-0 overflow-hidden rounded-xl border border-white/[0.08] bg-[#10151e]">
+        <div className="border-b border-white/[0.08] p-4 sm:p-5">
           <h2 className="font-semibold text-white">
             Detection Center
           </h2>
 
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
             Suspicious IP addresses detected by NetSentry AI.
           </p>
         </div>
@@ -157,8 +158,8 @@ useEffect(() => {
             Loading detection results...
           </div>
         ) : error ? (
-          <div className="p-6">
-            <p className="text-sm text-rose-400">{error}</p>
+          <div className="p-5 sm:p-6">
+            <p className="break-words text-sm text-rose-400">{error}</p>
 
             <button
               type="button"
@@ -169,7 +170,7 @@ useEffect(() => {
             </button>
           </div>
         ) : detections.length === 0 ? (
-          <div className="p-10 text-center">
+          <div className="px-4 py-10 text-center sm:px-6">
             <ShieldAlert
               size={34}
               className="mx-auto text-slate-500"
@@ -179,21 +180,21 @@ useEffect(() => {
               No suspicious activity detected
             </p>
 
-            <p className="mt-2 text-sm text-slate-400">
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-400">
               No IP addresses currently meet the failed-login
               detection threshold in the last 5 minutes.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px] text-left text-sm">
+          <div className="w-full overflow-x-auto overscroll-x-contain">
+            <table className="w-full min-w-[680px] text-left text-sm">
               <thead className="bg-white/[0.02]">
                 <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-slate-400">
-                  <th className="px-5 py-4">Source IP</th>
-                  <th className="px-5 py-4">Failed Attempts</th>
-                  <th className="px-5 py-4">First Seen</th>
-                  <th className="px-5 py-4">Last Seen</th>
-                  <th className="px-5 py-4">Status</th>
+                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Source IP</th>
+                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Failed Attempts</th>
+                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">First Seen</th>
+                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Last Seen</th>
+                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Status</th>
                 </tr>
               </thead>
 
@@ -203,30 +204,26 @@ useEffect(() => {
                     key={detection.source_ip}
                     className="border-b border-white/[0.06] transition hover:bg-white/[0.02] last:border-0"
                   >
-                    <td className="px-5 py-4 font-medium text-white">
+                    <td className="whitespace-nowrap px-4 py-4 font-mono font-medium text-white sm:px-5">
                       {detection.source_ip}
                     </td>
 
-                    <td className="px-5 py-4">
+                    <td className="px-4 py-4 sm:px-5">
                       <span className="font-semibold text-rose-300">
                         {detection.failed_attempts}
                       </span>
                     </td>
 
-                    <td className="px-5 py-4 text-slate-400">
-                      {new Date(
-                        detection.first_seen
-                      ).toLocaleString()}
+                    <td className="whitespace-nowrap px-4 py-4 text-xs text-slate-400 sm:px-5">
+                      {new Date(detection.first_seen).toLocaleString()}
                     </td>
 
-                    <td className="px-5 py-4 text-slate-400">
-                      {new Date(
-                        detection.last_seen
-                      ).toLocaleString()}
+                    <td className="whitespace-nowrap px-4 py-4 text-xs text-slate-400 sm:px-5">
+                      {new Date(detection.last_seen).toLocaleString()}
                     </td>
 
-                    <td className="px-5 py-4">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-xs font-medium text-rose-300">
+                    <td className="px-4 py-4 sm:px-5">
+                      <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-xs font-medium text-rose-300">
                         <AlertTriangle size={13} />
                         Suspicious
                       </span>
@@ -239,8 +236,8 @@ useEffect(() => {
         )}
       </div>
 
-      {/* Detection rule information */}
-      <div className="rounded-xl border border-teal-400/10 bg-teal-400/[0.03] p-4">
+      {/* Detection Rule Information */}
+      <div className="rounded-xl border border-teal-400/10 bg-teal-400/[0.03] p-4 sm:p-5">
         <p className="text-sm font-medium text-teal-300">
           Detection Rule
         </p>
