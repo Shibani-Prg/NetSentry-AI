@@ -11,6 +11,7 @@ const eventsRoutes = require("./routes/events.routes");
 const detectionsRoutes = require("./routes/detections.routes");
 const reportsRoutes = require("./routes/reports.routes");
 const detectionConfigRoutes = require("./routes/detectionConfig.routes");
+const authRoutes = require("./routes/auth.routes");
 
 const app = express();
 
@@ -68,6 +69,9 @@ app.use("/api/network-sources", networkSourcesRoutes);
 app.use("/api/events", eventsRoutes);
 app.use("/api/detections", detectionsRoutes);
 app.use("/api/reports", reportsRoutes);
+// Authentication routes
+app.use("/api/auth", authRoutes);
+
 
 // Handle unknown routes
 app.use(require("./middleware/notFound"));
