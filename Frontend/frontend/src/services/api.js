@@ -6,4 +6,15 @@ const api = axios.create({
   ).replace(/\/+$/, ""),
 });
 
+// Attach JWT token to API requests
+api.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem("netsentry_token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
 export default api;
