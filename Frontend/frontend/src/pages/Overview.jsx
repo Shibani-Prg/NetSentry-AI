@@ -18,8 +18,8 @@ function Overview() {
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-        <p className="animate-pulse text-sm text-slate-400">
+      <div className="theme-surface theme-border rounded-xl border p-6">
+        <p className="theme-text-secondary animate-pulse text-sm">
           Loading security intelligence...
         </p>
       </div>
@@ -28,11 +28,11 @@ function Overview() {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-rose-500/30 bg-rose-500/5 p-5">
-        <h2 className="font-semibold text-rose-300">
+      <div className="theme-surface theme-border rounded-xl border border-rose-500/30 p-5">
+        <h2 className="font-semibold text-rose-600 dark:text-rose-300">
           Unable to load security data
         </h2>
-        <p className="mt-2 text-sm text-slate-400">{error}</p>
+        <p className="theme-text-secondary mt-2 text-sm">{error}</p>
       </div>
     );
   }
@@ -40,34 +40,25 @@ function Overview() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.25em] text-emerald-400">
+        <p className="text-xs font-medium uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-400">
           Security Operations Center
         </p>
 
-        <h1 className="mt-2 text-2xl font-semibold text-white">
+        <h1 className="theme-text mt-2 text-2xl font-semibold">
           Threat Intelligence
         </h1>
 
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="theme-text-secondary mt-1 text-sm">
           Monitor security events and suspicious activity.
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          title="Total Events"
-          value={totalEvents}
-        />
+        <StatCard title="Total Events" value={totalEvents} />
 
-        <StatCard
-          title="Critical Events"
-          value={criticalTotal}
-        />
+        <StatCard title="Critical Events" value={criticalTotal} />
 
-        <StatCard
-          title="High Severity Events"
-          value={highTotal}
-        />
+        <StatCard title="High Severity Events" value={highTotal} />
 
         <StatCard
           title="Failed Login Detections"

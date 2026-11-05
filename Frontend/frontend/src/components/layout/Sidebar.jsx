@@ -9,7 +9,9 @@ import {
   Settings,
   Shield,
   ShieldCheck,
+  Wifi,
   X,
+  Users,
 } from "lucide-react";
 
 const links = [
@@ -17,125 +19,133 @@ const links = [
   { name: "Security Events", path: "/events", icon: Activity },
   { name: "Detections", path: "/detections", icon: Crosshair },
   { name: "Network Sources", path: "/sources", icon: Network },
+  { name: "LAN Simulator", path: "/lan-simulator", icon: Wifi },
   { name: "Reports", path: "/reports", icon: FileText },
 ];
+
+const navClass = ({ isActive }) =>
+  `group flex items-center gap-3 rounded-lg border px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
+    isActive
+      ? "theme-nav-active"
+      : "theme-nav-inactive"
+  }`;
 
 function Sidebar({ isOpen = false, onClose = () => {} }) {
   return (
     <>
-      {/* Mobile backdrop */}
+      {/* Mobile Overlay */}
       {isOpen && (
-        <button
-          type="button"
-          aria-label="Close sidebar"
-          onClick={onClose}
+        <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          onClick={onClose}
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[245px] flex-col border-r border-white/[0.07] bg-[#0d121b] transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`
+          theme-sidebar theme-sidebar-border
+          fixed left-0 top-0 z-50 flex h-dvh w-64 flex-col
+          border-r transition-transform duration-300
+          lg:translate-x-0
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
       >
-        {/* Logo */}
-        <div className="flex h-[76px] shrink-0 items-center justify-between gap-3 border-b border-white/[0.07] px-5">
+        {/* Brand */}
+        <div className="theme-sidebar-border flex h-[72px] shrink-0 items-center justify-between border-b px-5">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl border border-teal-300/20 bg-teal-300/[0.09] p-2.5 text-teal-300">
-              <Shield size={23} />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-teal-400/15 bg-teal-400/[0.08] text-teal-400">
+              <ShieldCheck size={21} />
             </div>
 
             <div>
-              <h1 className="text-base font-bold text-white">
-                NetSentry <span className="text-teal-300">AI</span>
+              <h1 className="theme-text text-[16px] font-bold tracking-tight">
+                NetSentry <span className="text-teal-400">AI</span>
               </h1>
-              <p className="mt-1 text-[9px] tracking-[0.2em] text-slate-500">
-                SECURITY INTELLIGENCE
+
+              <p className="theme-text-secondary mt-0.5 text-[9px] font-medium uppercase tracking-[1.8px]">
+                Security Operations
               </p>
             </div>
           </div>
 
-          {/* Mobile close button */}
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close sidebar"
-            className="rounded-lg p-2 text-slate-400 hover:bg-white/[0.06] hover:text-white lg:hidden"
+            aria-label="Close navigation menu"
+            className="theme-text-secondary transition-colors hover:text-teal-500 lg:hidden"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Workspace navigation */}
-        <div className="px-4 pt-7">
-          <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.17em] text-slate-600">
-            WORKSPACE
+        {/* Main Navigation */}
+        <div className="flex-1 overflow-y-auto px-3 py-6">
+          <p className="theme-text-secondary mb-3 px-3 text-[10px] font-semibold uppercase tracking-[1.8px]">
+            Workspace
           </p>
 
           <nav className="space-y-1">
-            {links.map(({ name, path, icon: Icon }) => (
-              <NavLink
-                key={path}
-                to={path}
-                end={path === "/"}
-                onClick={onClose}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-3 py-3 text-xs transition ${
-                    isActive
-                      ? "border border-teal-300/10 bg-teal-300/[0.09] font-medium text-teal-300"
-                      : "text-slate-400 hover:bg-white/[0.04] hover:text-white"
-                  }`
-                }
-              >
-                <Icon size={17} />
-                {name}
-              </NavLink>
-            ))}
+            {links.map((link) => {
+              const Icon = link.icon;
+
+              return (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  end={link.path === "/"}
+                  onClick={onClose}
+                  className={navClass}
+                >
+                  <Icon
+                    size={17}
+                    className="shrink-0 transition-colors group-hover:text-teal-500"
+                  />
+                  <span>{link.name}</span>
+                </NavLink>
+              );
+            })}
           </nav>
         </div>
 
-        {/* System navigation */}
-        <div className="mt-7 px-4">
-          <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.17em] text-slate-600">
-            SYSTEM
+        {/* System Section */}
+        <div className="theme-sidebar-border shrink-0 border-t px-3 py-4">
+          <p className="theme-text-secondary mb-3 px-3 text-[10px] font-semibold uppercase tracking-[1.8px]">
+            System
           </p>
 
-          <NavLink
-            to="/settings"
-            onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-3 text-xs ${
-                isActive
-                  ? "bg-teal-300/[0.09] text-teal-300"
-                  : "text-slate-400 hover:bg-white/[0.04]"
-              }`
-            }
-          >
-            <Settings size={17} />
-            Settings
-          </NavLink>
-        </div>
+          <nav className="space-y-1">
+            <NavLink
+              to="/settings"
+              onClick={onClose}
+              className={navClass}
+            >
+              <Settings size={17} />
+              <span>Settings</span>
+            </NavLink>
 
-        {/* Bottom section */}
-        <div className="mt-auto p-4">
-          <div className="rounded-xl border border-teal-300/10 bg-teal-300/[0.04] p-4">
-            <div className="flex items-center gap-2 text-xs font-medium text-teal-200">
-              <ShieldCheck size={16} />
-              Security workspace
-            </div>
-            <p className="mt-2 text-[11px] leading-5 text-slate-500">
-              Monitor ingested events and investigate suspicious activity.
-            </p>
-          </div>
+            <NavLink
+              to="/admin-users"
+              onClick={onClose}
+              className={navClass}
+            >
+              <Users size={17} />
+              <span>Admin Management</span>
+            </NavLink>
+          </nav>
 
-          <div className="mt-4 flex items-center gap-3 border-t border-white/[0.07] pt-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-700 text-xs font-semibold">
-              NS
+          {/* Status Card */}
+          <div className="theme-sidebar-card mt-4 flex items-center gap-3 rounded-lg border p-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-400/[0.08] text-teal-500">
+              <Shield size={18} />
             </div>
-            <div>
-              <p className="text-xs text-slate-200">Security Analyst</p>
-              <p className="mt-1 text-[10px] text-slate-500">
-                Local workspace
+
+            <div className="min-w-0">
+              <p className="theme-text truncate text-xs font-semibold">
+                NetSentry Protected
+              </p>
+
+              <p className="mt-1 text-[10px] text-emerald-500">
+                System Monitoring Active
               </p>
             </div>
           </div>

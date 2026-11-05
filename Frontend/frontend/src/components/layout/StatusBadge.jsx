@@ -1,3 +1,4 @@
+
 import {
   CheckCircle2,
   XCircle,
@@ -8,7 +9,7 @@ import {
 function StatusBadge({ status }) {
   if (status === "checking") {
     return (
-      <span className="flex shrink-0 items-center gap-1.5 text-xs text-slate-400">
+      <span className="theme-text-secondary flex shrink-0 items-center gap-1.5 text-xs">
         <LoaderCircle size={14} className="animate-spin" />
         Checking
       </span>
@@ -17,7 +18,7 @@ function StatusBadge({ status }) {
 
   if (status === "connected") {
     return (
-      <span className="flex shrink-0 items-center gap-1.5 text-xs text-emerald-400">
+      <span className="flex shrink-0 items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
         <CheckCircle2 size={14} />
         Connected
       </span>
@@ -26,7 +27,7 @@ function StatusBadge({ status }) {
 
   if (status === "disconnected") {
     return (
-      <span className="flex shrink-0 items-center gap-1.5 text-xs text-rose-400">
+      <span className="flex shrink-0 items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400">
         <XCircle size={14} />
         Disconnected
       </span>
@@ -34,7 +35,7 @@ function StatusBadge({ status }) {
   }
 
   return (
-    <span className="flex shrink-0 items-center gap-1.5 text-xs text-slate-500">
+    <span className="theme-text-secondary flex shrink-0 items-center gap-1.5 text-xs">
       <CircleHelp size={14} />
       Not checked
     </span>

@@ -2,12 +2,12 @@ import { ShieldCheck } from "lucide-react";
 
 function DetectionSettings({ settings, updateSetting }) {
   return (
-    <section className="rounded-xl border border-white/[0.08] bg-[#10151e] p-5">
+    <section className="theme-surface theme-border rounded-xl border p-5">
       <div className="flex items-center gap-3">
-        <ShieldCheck size={21} className="text-indigo-300" />
+        <ShieldCheck size={21} className="text-indigo-600 dark:text-indigo-300" />
         <div>
-          <h2 className="font-medium text-white">Detection configuration</h2>
-          <p className="mt-1 text-xs text-slate-500">
+          <h2 className="theme-text font-medium">Detection configuration</h2>
+          <p className="theme-text-secondary mt-1 text-xs">
             Failed-login detection preferences
           </p>
         </div>
@@ -15,10 +15,10 @@ function DetectionSettings({ settings, updateSetting }) {
 
       <div className="mt-6">
         <div className="flex items-center justify-between gap-3">
-          <label className="text-sm text-slate-200">
+          <label className="theme-text text-sm">
             Failed-login threshold
           </label>
-          <span className="font-semibold text-teal-300">
+          <span className="font-semibold text-teal-600 dark:text-teal-300">
             {settings.failedLoginThreshold}
           </span>
         </div>
@@ -31,20 +31,20 @@ function DetectionSettings({ settings, updateSetting }) {
           onChange={(event) =>
             updateSetting("failedLoginThreshold", Number(event.target.value))
           }
-          className="mt-3 w-full accent-teal-400"
+          className="mt-3 w-full accent-teal-500"
         />
 
-        <p className="mt-2 text-xs text-slate-500">
+        <p className="theme-text-secondary mt-2 text-xs">
           Number of failed login attempts that should trigger a detection.
         </p>
       </div>
 
       <div className="mt-6">
         <div className="flex items-center justify-between gap-3">
-          <label className="text-sm text-slate-200">
+          <label className="theme-text text-sm">
             Detection time window
           </label>
-          <span className="font-semibold text-teal-300">
+          <span className="font-semibold text-teal-600 dark:text-teal-300">
             {settings.detectionWindow} min
           </span>
         </div>
@@ -57,20 +57,20 @@ function DetectionSettings({ settings, updateSetting }) {
           onChange={(event) =>
             updateSetting("detectionWindow", Number(event.target.value))
           }
-          className="mt-3 w-full accent-teal-400"
+          className="mt-3 w-full accent-teal-500"
         />
       </div>
 
-       <div className="mt-5 rounded-lg border border-teal-300/15 bg-teal-300/[0.04] p-3">
-        <p className="flex items-center gap-2 text-xs font-medium text-teal-200">
-            <ShieldCheck size={14} />
-            Server-side detection enabled
+      <div className="mt-5 rounded-lg border border-teal-500/20 bg-teal-500/5 p-3">
+        <p className="flex items-center gap-2 text-xs font-medium text-teal-700 dark:text-teal-200">
+          <ShieldCheck size={14} />
+          Server-side detection enabled
         </p>
-        <p className="mt-2 text-xs leading-5 text-slate-400">
-            Saved threshold and detection window are applied by the backend
-            detection engine.
+        <p className="theme-text-secondary mt-2 text-xs leading-5">
+          Saved threshold and detection window are applied by the backend
+          detection engine.
         </p>
-        </div>
+      </div>
     </section>
   );
 }

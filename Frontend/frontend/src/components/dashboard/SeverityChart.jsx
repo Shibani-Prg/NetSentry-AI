@@ -29,14 +29,14 @@ function SeverityChart({ events = [] }) {
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-[#101722] p-4 transition-colors hover:border-slate-700 sm:p-5">
+    <section className="theme-surface theme-border min-w-0 overflow-hidden rounded-2xl border p-4 transition-colors duration-200 hover:border-slate-300 dark:hover:border-slate-700 sm:p-5">
       {/* Header */}
       <div className="mb-4 sm:mb-5">
-        <h2 className="text-base font-semibold text-white sm:text-lg">
+        <h2 className="theme-text text-base font-semibold sm:text-lg">
           Events by Severity
         </h2>
 
-        <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+        <p className="theme-text-secondary mt-1 text-xs sm:text-sm">
           Distribution of recorded security events
         </p>
       </div>
@@ -45,11 +45,11 @@ function SeverityChart({ events = [] }) {
       <div className="h-64 min-w-0 w-full sm:h-64">
         {total === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
-            <p className="text-sm font-medium text-slate-300">
+            <p className="theme-text text-sm font-medium">
               No severity data available
             </p>
 
-            <p className="text-xs text-slate-500">
+            <p className="theme-text-secondary text-xs">
               Severity distribution will appear when events are recorded.
             </p>
           </div>
@@ -78,7 +78,7 @@ function SeverityChart({ events = [] }) {
                 y="39%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill="#94a3b8"
+                fill="var(--text-secondary)"
                 fontSize={10}
               >
                 TOTAL EVENTS
@@ -89,7 +89,7 @@ function SeverityChart({ events = [] }) {
                 y="49%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill="#f8fafc"
+                fill="var(--text-primary)"
                 fontSize={21}
                 fontWeight={600}
               >
@@ -98,11 +98,14 @@ function SeverityChart({ events = [] }) {
 
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#101722",
-                  border: "1px solid #334155",
+                  backgroundColor: "var(--surface)",
+                  border: "1px solid var(--border-color)",
                   borderRadius: "10px",
-                  color: "#f8fafc",
+                  color: "var(--text-primary)",
                   fontSize: "12px",
+                }}
+                itemStyle={{
+                  color: "var(--text-primary)",
                 }}
                 formatter={(value, name) => [value, name]}
               />
@@ -118,7 +121,12 @@ function SeverityChart({ events = [] }) {
                   width: "100%",
                 }}
                 formatter={(value) => (
-                  <span style={{ color: "#cbd5e1", fontSize: 10 }}>
+                  <span
+                    style={{
+                      color: "var(--text-secondary)",
+                      fontSize: 10,
+                    }}
+                  >
                     {value}
                   </span>
                 )}

@@ -1,3 +1,4 @@
+
 import {
   X,
   Server,
@@ -6,7 +7,8 @@ import {
   RefreshCw,
   Clock3,
 } from "lucide-react";
-import StatusBadge from "./StatusBadge";
+
+import StatusBadge from "../StatusBadge";
 
 function EnvironmentPanel({
   health,
@@ -28,17 +30,18 @@ function EnvironmentPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="environment-title"
-        className="absolute right-3 top-[82px] max-h-[calc(100vh-100px)] w-[calc(100%-1.5rem)] max-w-sm overflow-y-auto rounded-xl border border-white/10 bg-[#10151e] p-5 shadow-2xl sm:right-7 sm:top-[90px]"
+        className="theme-surface theme-border theme-text absolute right-3 top-[82px] max-h-[calc(100vh-100px)] w-[calc(100%-1.5rem)] max-w-sm overflow-y-auto rounded-xl border p-5 shadow-2xl transition-colors duration-200 sm:right-7 sm:top-[90px]"
       >
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3
               id="environment-title"
-              className="font-semibold text-white"
+              className="font-semibold"
             >
               Local Environment
             </h3>
-            <p className="mt-1 text-xs text-slate-400">
+
+            <p className="theme-text-secondary mt-1 text-xs">
               Live service connectivity
             </p>
           </div>
@@ -47,92 +50,112 @@ function EnvironmentPanel({
             type="button"
             aria-label="Close environment panel"
             onClick={onClose}
-            className="rounded-lg p-2 text-slate-400 hover:bg-white/5 hover:text-white"
+            className="theme-text-secondary rounded-lg p-2 transition hover:bg-black/5 hover:text-teal-600 dark:hover:bg-white/5 dark:hover:text-teal-300"
           >
             <X size={18} />
           </button>
         </div>
 
         <div className="mt-5 space-y-3">
-          <div className="rounded-lg border border-white/[0.08] p-3">
+
+          {/* Frontend */}
+          <div className="theme-border rounded-lg border p-3">
             <div className="flex items-center gap-3">
-              <Server size={19} className="shrink-0 text-teal-300" />
+              <Server size={19} className="shrink-0 text-teal-600 dark:text-teal-300" />
+
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-white">Frontend</p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="font-medium text-sm">Frontend</p>
+
+                <p className="theme-text-secondary mt-1 text-xs">
                   React application
                 </p>
               </div>
-              <span className="text-xs text-emerald-400">Loaded</span>
+
+              <span className="text-xs text-emerald-600 dark:text-emerald-400">
+                Loaded
+              </span>
             </div>
           </div>
 
-          <div className="rounded-lg border border-white/[0.08] p-3">
+          {/* Backend */}
+          <div className="theme-border rounded-lg border p-3">
             <div className="flex items-start gap-3">
-              <Server size={19} className="mt-0.5 shrink-0 text-indigo-300" />
+              <Server size={19} className="mt-0.5 shrink-0 text-indigo-500 dark:text-indigo-300" />
+
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-white">Backend API</p>
-                <p className="mt-1 break-all text-xs text-slate-400">
+                <p className="font-medium text-sm">Backend API</p>
+
+                <p className="theme-text-secondary mt-1 break-all text-xs">
                   {apiUrl}
                 </p>
               </div>
+
               <StatusBadge status={health.backend} />
             </div>
           </div>
 
-          <div className="rounded-lg border border-white/[0.08] p-3">
+          {/* Database */}
+          <div className="theme-border rounded-lg border p-3">
             <div className="flex items-start gap-3">
-              <Database size={19} className="mt-0.5 shrink-0 text-indigo-300" />
+              <Database size={19} className="mt-0.5 shrink-0 text-indigo-500 dark:text-indigo-300" />
+
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-white">PostgreSQL</p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="font-medium text-sm">PostgreSQL</p>
+
+                <p className="theme-text-secondary mt-1 text-xs">
                   Database connectivity
                 </p>
               </div>
+
               <StatusBadge status={health.database} />
             </div>
           </div>
         </div>
 
+        {/* Error */}
         {health.error && (
           <div
             role="alert"
-            className="mt-3 rounded-lg border border-rose-400/20 bg-rose-400/[0.06] p-3 text-xs leading-relaxed text-rose-300"
+            className="mt-3 rounded-lg border border-rose-500/20 bg-rose-500/5 p-3 text-xs leading-relaxed text-rose-600 dark:text-rose-300"
           >
             {health.error}
           </div>
         )}
 
+        {/* Last Checked */}
         {health.timestamp && (
-          <p className="mt-3 flex items-center gap-1.5 text-xs text-slate-500">
+          <p className="theme-text-secondary mt-3 flex items-center gap-1.5 text-xs">
             <Clock3 size={13} />
             Last checked: {new Date(health.timestamp).toLocaleString()}
           </p>
         )}
 
+        {/* Refresh Status */}
         <button
           type="button"
           onClick={checkHealth}
           disabled={checking}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-teal-300/20 bg-teal-300/[0.08] px-4 py-2.5 text-sm font-medium text-teal-300 transition hover:bg-teal-300/[0.15] disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-teal-500/20 bg-teal-500/5 px-4 py-2.5 text-sm font-medium text-teal-700 transition hover:bg-teal-500/10 disabled:cursor-not-allowed disabled:opacity-60 dark:text-teal-300"
         >
           <RefreshCw
             size={16}
             className={checking ? "animate-spin" : ""}
           />
+
           {checking ? "Checking Services..." : "Refresh Status"}
         </button>
 
+        {/* Dashboard */}
         <button
           type="button"
           onClick={onDashboard}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-teal-400 px-4 py-2.5 text-sm font-semibold text-[#07110f] transition hover:bg-teal-300"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-teal-700"
         >
           <Home size={16} />
           Back to Dashboard
         </button>
 
-        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+        <p className="theme-text-secondary mt-3 text-xs leading-relaxed">
           Backend and database status comes from the health API. Frontend
           indicates that this page is loaded.
         </p>

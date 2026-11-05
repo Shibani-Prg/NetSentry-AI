@@ -1,10 +1,6 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-const API = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000"
-).replace(/\/+$/, "");
+import api from "../services/api";
 
 export function useSecurityEvents() {
   const [events, setEvents] = useState([]);
@@ -24,14 +20,10 @@ export function useSecurityEvents() {
 
         const [eventsRes, criticalRes, highRes, detectionsRes] =
           await Promise.all([
-            axios.get(`${API}/api/events?page=1&limit=100`),
-            axios.get(
-              `${API}/api/events?page=1&limit=1&severity=CRITICAL`
-            ),
-            axios.get(
-              `${API}/api/events?page=1&limit=1&severity=HIGH`
-            ),
-            axios.get(`${API}/api/detections/failed-logins`),
+            api.get("/api/events?page=1&limit=100"),
+            api.get("/api/events?page=1&limit=1&severity=CRITICAL"),
+            api.get("/api/events?page=1&limit=1&severity=HIGH"),
+            api.get("/api/detections/failed-logins"),
           ]);
 
         if (cancelled) return;

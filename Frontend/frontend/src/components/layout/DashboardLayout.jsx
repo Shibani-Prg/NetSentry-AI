@@ -1,8 +1,10 @@
 
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+
 import Sidebar from "./Sidebar.jsx";
-import Topbar from "./Topbar.jsx";
+import Topbar from "./topbar/Topbar.jsx";
+import Footer from "./Footer.jsx";
 
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -12,20 +14,28 @@ function DashboardLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-[#090d14] text-slate-200">
+    <div className="theme-bg theme-text min-h-screen transition-colors duration-200">
       <Sidebar
         isOpen={sidebarOpen}
         onClose={closeSidebar}
       />
 
-      <div className="min-h-screen lg:ml-[245px]">
+      {/* Main Dashboard Area */}
+      <div className="flex min-h-screen min-w-0 flex-col lg:ml-64">
+
+        {/* Top Navigation */}
         <Topbar
           onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <main className="min-w-0 p-4 sm:p-7">
+        {/* Page Content */}
+        <main className="theme-bg w-full min-w-0 flex-1 p-4 transition-colors duration-200 sm:p-6 xl:p-8">
           <Outlet />
         </main>
+
+        {/* Footer */}
+        <Footer />
+
       </div>
     </div>
   );

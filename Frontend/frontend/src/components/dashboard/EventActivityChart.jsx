@@ -44,20 +44,20 @@ function EventActivityChart({ events = [] }) {
   );
 
   return (
-    <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-800 bg-[#101722] p-4 transition-colors hover:border-slate-700 sm:p-5">
+    <section className="theme-surface theme-border min-w-0 overflow-hidden rounded-2xl border p-4 transition-colors duration-200 hover:border-slate-300 dark:hover:border-slate-700 sm:p-5">
       {/* Header */}
       <div className="mb-5 flex flex-wrap items-start justify-between gap-3 sm:mb-6">
         <div className="min-w-0">
-          <h2 className="text-base font-semibold text-white sm:text-lg">
+          <h2 className="theme-text text-base font-semibold sm:text-lg">
             Security Event Activity
           </h2>
 
-          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+          <p className="theme-text-secondary mt-1 text-xs sm:text-sm">
             Events recorded per day
           </p>
         </div>
 
-        <span className="shrink-0 rounded-lg border border-cyan-400/20 bg-cyan-400/10 px-2.5 py-1.5 text-[10px] font-medium text-cyan-300 sm:px-3 sm:text-xs">
+        <span className="shrink-0 rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-1.5 text-[10px] font-medium text-cyan-700 dark:text-cyan-300 sm:px-3 sm:text-xs">
           {events.length.toLocaleString("en-IN")} events
         </span>
       </div>
@@ -66,11 +66,11 @@ function EventActivityChart({ events = [] }) {
       <div className="h-56 min-w-0 w-full sm:h-64">
         {data.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 px-2 text-center">
-            <p className="text-sm font-medium text-slate-300">
+            <p className="theme-text text-sm font-medium">
               No event activity available
             </p>
 
-            <p className="text-xs text-slate-500">
+            <p className="theme-text-secondary text-xs">
               Activity will appear when timestamped events are available.
             </p>
           </div>
@@ -103,14 +103,17 @@ function EventActivityChart({ events = [] }) {
               </defs>
 
               <CartesianGrid
-                stroke="#263244"
+                stroke="var(--border-color)"
                 strokeDasharray="3 5"
                 vertical={false}
               />
 
               <XAxis
                 dataKey="date"
-                tick={{ fill: "#94a3b8", fontSize: 10 }}
+                tick={{
+                  fill: "var(--text-secondary)",
+                  fontSize: 10,
+                }}
                 axisLine={false}
                 tickLine={false}
                 minTickGap={25}
@@ -119,7 +122,10 @@ function EventActivityChart({ events = [] }) {
 
               <YAxis
                 allowDecimals={false}
-                tick={{ fill: "#94a3b8", fontSize: 10 }}
+                tick={{
+                  fill: "var(--text-secondary)",
+                  fontSize: 10,
+                }}
                 axisLine={false}
                 tickLine={false}
                 width={30}
@@ -127,14 +133,14 @@ function EventActivityChart({ events = [] }) {
 
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#101722",
-                  border: "1px solid #334155",
+                  backgroundColor: "var(--surface)",
+                  border: "1px solid var(--border-color)",
                   borderRadius: "12px",
-                  color: "#f8fafc",
+                  color: "var(--text-primary)",
                   fontSize: "12px",
                 }}
                 labelStyle={{
-                  color: "#94a3b8",
+                  color: "var(--text-secondary)",
                   marginBottom: "4px",
                 }}
                 formatter={(value) => [value, "Events"]}
@@ -150,7 +156,7 @@ function EventActivityChart({ events = [] }) {
                 activeDot={{
                   r: 5,
                   fill: "#38bdf8",
-                  stroke: "#101722",
+                  stroke: "var(--surface)",
                   strokeWidth: 2,
                 }}
               />

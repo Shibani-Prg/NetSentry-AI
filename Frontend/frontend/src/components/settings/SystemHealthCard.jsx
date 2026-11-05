@@ -1,4 +1,3 @@
-
 import {
   Database,
   Server,
@@ -12,7 +11,7 @@ import api from "../../services/api";
 function HealthStatus({ status }) {
   if (status === "connected") {
     return (
-      <span className="flex items-center gap-1.5 text-xs text-emerald-400">
+      <span className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
         <CheckCircle2 size={15} /> Connected
       </span>
     );
@@ -20,7 +19,7 @@ function HealthStatus({ status }) {
 
   if (status === "disconnected") {
     return (
-      <span className="flex items-center gap-1.5 text-xs text-rose-400">
+      <span className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400">
         <XCircle size={15} /> Disconnected
       </span>
     );
@@ -28,14 +27,14 @@ function HealthStatus({ status }) {
 
   if (status === "checking") {
     return (
-      <span className="flex items-center gap-1.5 text-xs text-amber-300">
+      <span className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-300">
         <RefreshCw size={14} className="animate-spin" /> Checking
       </span>
     );
   }
 
   return (
-    <span className="flex items-center gap-1.5 text-xs text-slate-500">
+    <span className="theme-text-secondary flex items-center gap-1.5 text-xs">
       <CircleHelp size={15} /> Not checked
     </span>
   );
@@ -45,12 +44,12 @@ function SystemHealthCard({ health, checking, onCheck }) {
   const apiUrl = api.defaults.baseURL || "Not configured";
 
   return (
-    <section className="rounded-xl border border-white/[0.08] bg-[#10151e] p-5">
+    <section className="theme-surface theme-border rounded-xl border p-5">
       <div className="flex items-center gap-3">
-        <Database size={21} className="text-teal-300" />
+        <Database size={21} className="text-teal-600 dark:text-teal-300" />
         <div>
-          <h2 className="font-medium text-white">System health</h2>
-          <p className="mt-1 text-xs text-slate-500">
+          <h2 className="theme-text font-medium">System health</h2>
+          <p className="theme-text-secondary mt-1 text-xs">
             Backend and database connectivity
           </p>
         </div>
@@ -58,33 +57,33 @@ function SystemHealthCard({ health, checking, onCheck }) {
 
       <div className="mt-5 space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <span className="flex items-center gap-2 text-sm text-slate-300">
-            <Server size={16} className="text-slate-500" />
+          <span className="theme-text flex items-center gap-2 text-sm">
+            <Server size={16} className="theme-text-secondary" />
             Backend API
           </span>
           <HealthStatus status={checking ? "checking" : health.backend} />
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <span className="flex items-center gap-2 text-sm text-slate-300">
-            <Database size={16} className="text-slate-500" />
+          <span className="theme-text flex items-center gap-2 text-sm">
+            <Database size={16} className="theme-text-secondary" />
             PostgreSQL
           </span>
           <HealthStatus status={checking ? "checking" : health.database} />
         </div>
 
-        <div className="break-all rounded-lg bg-black/20 p-3 text-xs text-slate-400">
+        <div className="theme-surface-secondary theme-text-secondary break-all rounded-lg p-3 text-xs">
           API endpoint: {apiUrl}
         </div>
 
         {health.message && (
-          <p role="alert" className="text-xs leading-5 text-rose-300">
+          <p role="alert" className="text-xs leading-5 text-rose-600 dark:text-rose-300">
             {health.message}
           </p>
         )}
 
         {health.timestamp && (
-          <p className="text-xs text-slate-500">
+          <p className="theme-text-secondary text-xs">
             Last checked: {new Date(health.timestamp).toLocaleString()}
           </p>
         )}
@@ -93,7 +92,7 @@ function SystemHealthCard({ health, checking, onCheck }) {
           type="button"
           onClick={onCheck}
           disabled={checking}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-teal-300/20 bg-teal-300/[0.06] px-4 py-2.5 text-sm text-teal-300 transition hover:bg-teal-300/10 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-teal-500/20 bg-teal-500/10 px-4 py-2.5 text-sm text-teal-700 transition hover:bg-teal-500/15 disabled:opacity-50 dark:text-teal-300 dark:hover:bg-teal-300/10"
         >
           <RefreshCw
             size={15}

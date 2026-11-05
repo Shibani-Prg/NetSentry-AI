@@ -1,3 +1,4 @@
+
 export default function AuthInput({
   label,
   name,
@@ -10,7 +11,7 @@ export default function AuthInput({
     <div className="space-y-2">
       <label
         htmlFor={name}
-        className="block text-sm font-medium text-slate-300"
+        className="theme-text block text-sm font-medium"
       >
         {label}
       </label>
@@ -24,7 +25,7 @@ export default function AuthInput({
         placeholder={placeholder}
         required
         autoComplete={name === "email" ? "username" : "off"}
-        className="w-full rounded-lg border border-slate-700 bg-[#111827] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
+        className="theme-surface-secondary theme-text theme-border w-full rounded-lg border px-4 py-3 text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20"
       />
     </div>
   );

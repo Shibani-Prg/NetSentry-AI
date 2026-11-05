@@ -1,4 +1,7 @@
-const { loginAdmin } = require("../services/auth.service");
+const {
+  loginAdmin,
+  registerAdmin,
+} = require("../services/auth.service");
 const pool = require("../db");
 
 async function login(req, res, next) {
@@ -51,7 +54,36 @@ async function getCurrentUser(req, res, next) {
   }
 }
 
+
+async function register(req, res, next) {
+  try {
+    const { name, email, password } = req.body;
+
+    const newAdmin = await registerAdmin({
+      name,
+      email,
+      password,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Admin account created successfully",
+      admin: newAdmin,
+    });
+  } catch (error) {
+    if (error.statusCode === 409 || error.code === "23505") {
+      return res.status(409).json({
+        success: false,
+        message: "Email is already registered",
+      });
+    }
+
+    next(error);
+  }
+}
+
 module.exports = {
   login,
   getCurrentUser,
+  register,
 };

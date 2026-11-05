@@ -1,4 +1,3 @@
-
 import { FileText, Download } from "lucide-react";
 
 function ReportHeader({ loading, reportAvailable, onDownload }) {
@@ -6,14 +5,14 @@ function ReportHeader({ loading, reportAvailable, onDownload }) {
     <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <FileText size={23} className="shrink-0 text-indigo-400" />
+          <FileText size={23} className="shrink-0 text-indigo-600 dark:text-indigo-400" />
 
-          <h1 className="text-xl font-semibold text-white sm:text-2xl">
+          <h1 className="theme-text text-xl font-semibold sm:text-2xl">
             Security Reports
           </h1>
         </div>
 
-        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+        <p className="theme-text-secondary mt-2 text-sm leading-relaxed">
           Analyze security events and export reports from NetSentry AI.
         </p>
       </div>

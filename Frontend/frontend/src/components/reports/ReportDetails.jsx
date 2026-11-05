@@ -1,4 +1,3 @@
-
 function ReportDetails({ range, events, generatedAt }) {
   const selectedPeriod =
     range === "24h"
@@ -25,12 +24,12 @@ function ReportDetails({ range, events, generatedAt }) {
   ];
 
   return (
-    <div className="min-w-0 overflow-hidden rounded-xl border border-white/[0.08] bg-[#10151e] p-4 sm:p-5">
-      <h3 className="font-semibold text-white">
+    <div className="theme-surface theme-border min-w-0 overflow-hidden rounded-xl border p-4 sm:p-5">
+      <h3 className="theme-text font-semibold">
         Report Details
       </h3>
 
-      <p className="mt-1 text-sm text-slate-500">
+      <p className="theme-text-secondary mt-1 text-sm">
         Metadata for this report
       </p>
 
@@ -40,11 +39,11 @@ function ReportDetails({ range, events, generatedAt }) {
             key={detail.label}
             className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3"
           >
-            <span className="text-sm text-slate-400">
+            <span className="theme-text-secondary text-sm">
               {detail.label}
             </span>
 
-            <span className="break-words text-sm font-medium text-white sm:text-right">
+            <span className="theme-text break-words text-sm font-medium sm:text-right">
               {detail.value}
             </span>
           </div>

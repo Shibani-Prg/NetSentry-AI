@@ -1,22 +1,141 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+
+/* ========================================
+   NETSENTRY AI - CENTRALIZED THEME TOKENS
+======================================== */
+
+@theme inline {
+  --color-app: var(--app-bg);
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-content: var(--text-primary);
+  --color-muted: var(--text-secondary);
+  --color-border: var(--border-color);
+  --color-sidebar: var(--sidebar-bg);
+}
+
+/* DARK THEME - DEFAULT */
+
 :root {
   font-family: Inter, system-ui, sans-serif;
-  color: #e5e7eb;
-  background: #080b12;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  color-scheme: dark;
+
+  --app-bg: #080b12;
+  --surface: #10151e;
+  --surface-secondary: #151b26;
+  --text-primary: #e5e7eb;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --sidebar-bg: #080f18;
+  --sidebar-border: rgba(255, 255, 255, 0.07);
+  --sidebar-card: rgba(255, 255, 255, 0.025);
+  --nav-hover: rgba(255, 255, 255, 0.04);
+  --nav-active-bg: rgba(45, 212, 191, 0.08);
+  --nav-active-text: #5eead4;
 }
+
+/* LIGHT THEME */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --app-bg: #f1f5f9;
+  --surface: #ffffff;
+  --surface-secondary: #f8fafc;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border-color: rgba(15, 23, 42, 0.1);
+
+  --sidebar-bg: #ffffff;
+  --sidebar-border: rgba(15, 23, 42, 0.09);
+  --sidebar-card: #f8fafc;
+  --nav-hover: #f1f5f9;
+  --nav-active-bg: rgba(13, 148, 136, 0.09);
+  --nav-active-text: #0f766e;
+}
+
+/* GLOBAL RESET */
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  background: var(--app-bg);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--app-bg);
+  color: var(--text-primary);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* REUSABLE THEME CLASSES */
+
+.theme-bg {
+  background-color: var(--app-bg);
+}
+
+.theme-surface {
+  background-color: var(--surface);
+}
+
+.theme-surface-secondary {
+  background-color: var(--surface-secondary);
+}
+
+.theme-text {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-border {
+  border-color: var(--border-color);
+}
+
+/* SIDEBAR THEME */
+
+.theme-sidebar {
+  background-color: var(--sidebar-bg);
+}
+
+.theme-sidebar-border {
+  border-color: var(--sidebar-border);
+}
+
+.theme-sidebar-card {
+  background-color: var(--sidebar-card);
+  border-color: var(--sidebar-border);
+}
+
+.theme-nav-active {
+  background-color: var(--nav-active-bg);
+  color: var(--nav-active-text);
+  border-color: rgba(20, 184, 166, 0.2);
+}
+
+.theme-nav-inactive {
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+
+.theme-nav-inactive:hover {
+  background-color: var(--nav-hover);
+  color: var(--text-primary);
 }

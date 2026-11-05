@@ -1,3 +1,4 @@
+
 const jwt = require("jsonwebtoken");
 const env = require("../config/env");
 const pool = require("../db");
@@ -31,7 +32,7 @@ async function authenticateToken(req, res, next) {
 
     const user = result.rows[0];
 
-    if (!user || !user.is_active || user.role !== "admin") {
+    if (!user || !user.is_active) {
       return res.status(401).json({
         success: false,
         message: "User is not authorized",

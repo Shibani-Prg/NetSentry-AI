@@ -6,31 +6,57 @@ const helmet = require("helmet");
 const env = require("./config/env");
 const pool = require("./db");
 
+const authenticateToken = require("./middleware/auth.middleware");
+
 const networkSourcesRoutes = require("./routes/networkSources.routes");
 const eventsRoutes = require("./routes/events.routes");
 const detectionsRoutes = require("./routes/detections.routes");
 const reportsRoutes = require("./routes/reports.routes");
 const detectionConfigRoutes = require("./routes/detectionConfig.routes");
 const authRoutes = require("./routes/auth.routes");
+const demoRoutes = require("./routes/demo.routes");
+const adminsRoutes = require("./routes/admins.routes");
+const requireSuperAdmin = require("./middleware/requireSuperAdmin");
 
 const app = express();
 
 // Security headers
 app.use(helmet());
 
-// CORS
+// CORS - Allow multiple trusted frontend origins
+const allowedOrigins = (env.FRONTEND_URL || "")
+  .split(",")
+  .map((url) => url.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: env.FRONTEND_URL,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 // Parse JSON requests
 app.use(express.json({ limit: "1mb" }));
 
-app.use("/api/detection-config", detectionConfigRoutes);
+app.use(
+  express.urlencoded({
+    extended: false,
+    limit: "10kb",
+  })
+);
 
-// Basic backend health check
+// Public LAN demo routes
+app.use("/demo-login", demoRoutes);
+
+// Public backend health check
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -39,7 +65,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Live backend + database health check
+// Public database health check
 app.get("/api/health", async (req, res) => {
   let database = "disconnected";
 
@@ -64,14 +90,26 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// API routes
+// Public authentication routes
+app.use("/api/auth", authRoutes);
+
+// Super Admin protected routes
+app.use(
+  "/api/admins",
+  authenticateToken,
+  requireSuperAdmin,
+  adminsRoutes
+);
+
+// Protect all dashboard APIs below this middleware
+app.use("/api", authenticateToken);
+
+// Protected dashboard routes
 app.use("/api/network-sources", networkSourcesRoutes);
 app.use("/api/events", eventsRoutes);
 app.use("/api/detections", detectionsRoutes);
 app.use("/api/reports", reportsRoutes);
-// Authentication routes
-app.use("/api/auth", authRoutes);
-
+app.use("/api/detection-config", detectionConfigRoutes);
 
 // Handle unknown routes
 app.use(require("./middleware/notFound"));
