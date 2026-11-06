@@ -1,4 +1,3 @@
-
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -8,6 +7,8 @@ const env = {
 
   FRONTEND_URL:
     process.env.FRONTEND_URL || "http://localhost:5173",
+
+  DATABASE_URL: process.env.DATABASE_URL,
 
   DB_HOST: process.env.DB_HOST,
   DB_PORT: Number(process.env.DB_PORT || 5432),
@@ -24,6 +25,10 @@ const env = {
 
 if (env.NODE_ENV === "production" && !env.JWT_SECRET) {
   throw new Error("JWT_SECRET is required in production");
+}
+
+if (env.NODE_ENV === "production" && !env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is required in production");
 }
 
 module.exports = env;

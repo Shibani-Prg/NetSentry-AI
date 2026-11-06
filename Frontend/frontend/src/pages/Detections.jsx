@@ -84,16 +84,16 @@ function Detections() {
       {/* Page Heading */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="shrink-0 rounded-xl border border-rose-400/20 bg-rose-400/10 p-2.5 text-rose-300 sm:p-3">
+          <div className="shrink-0 rounded-xl border border-rose-500/20 bg-rose-500/10 p-2.5 text-rose-600 dark:text-rose-400 sm:p-3">
             <ShieldAlert size={24} />
           </div>
 
           <div className="min-w-0">
-            <p className="text-xs tracking-widest text-teal-300">
+            <p className="text-xs tracking-widest text-teal-600 dark:text-teal-300">
               THREAT MONITORING
             </p>
 
-            <h1 className="mt-1 text-xl font-semibold text-white sm:text-2xl">
+            <h1 className="theme-text mt-1 text-xl font-semibold sm:text-2xl">
               Threat Detections
             </h1>
           </div>
@@ -103,7 +103,7 @@ function Detections() {
           type="button"
           onClick={() => fetchDetections(true)}
           disabled={loading || refreshing}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2.5 text-sm text-slate-200 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+          className="theme-border theme-text-secondary inline-flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-white/5 sm:w-auto"
         >
           <RefreshCw
             size={16}
@@ -113,58 +113,60 @@ function Detections() {
         </button>
       </div>
 
-      <p className="text-sm leading-6 text-slate-400">
+      <p className="theme-text-secondary text-sm leading-6">
         Monitor failed-login detections and investigate suspicious
         IP addresses identified by your detection rules.
       </p>
 
       {/* Detection Summary */}
-      <div className="rounded-xl border border-white/[0.08] bg-[#10151e] p-4 sm:p-6">
+      <div className="theme-surface theme-border rounded-xl border p-4 sm:p-6">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-sm text-slate-400">
+            <p className="theme-text-secondary text-sm">
               Active detections
             </p>
 
-            <p className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
+            <p className="theme-text mt-2 text-2xl font-semibold sm:text-3xl">
               {loading ? "—" : detections.length}
             </p>
 
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="theme-text-secondary mt-2 text-xs">
               Based on the configured failed-login rule
             </p>
           </div>
 
-          <div className="shrink-0 rounded-xl border border-rose-400/20 bg-rose-400/10 p-2.5 text-rose-300 sm:p-3">
+          <div className="shrink-0 rounded-xl border border-rose-500/20 bg-rose-500/10 p-2.5 text-rose-600 dark:text-rose-400 sm:p-3">
             <Activity size={26} />
           </div>
         </div>
       </div>
 
       {/* Detection Results */}
-      <div className="min-w-0 overflow-hidden rounded-xl border border-white/[0.08] bg-[#10151e]">
-        <div className="border-b border-white/[0.08] p-4 sm:p-5">
-          <h2 className="font-semibold text-white">
+      <div className="theme-surface theme-border min-w-0 overflow-hidden rounded-xl border">
+        <div className="theme-border border-b p-4 sm:p-5">
+          <h2 className="theme-text font-semibold">
             Detection Center
           </h2>
 
-          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+          <p className="theme-text-secondary mt-1 text-xs sm:text-sm">
             Suspicious IP addresses detected by NetSentry AI.
           </p>
         </div>
 
         {loading ? (
-          <div className="p-8 text-center text-sm text-slate-400">
+          <div className="theme-text-secondary p-8 text-center text-sm">
             Loading detection results...
           </div>
         ) : error ? (
           <div className="p-5 sm:p-6">
-            <p className="break-words text-sm text-rose-400">{error}</p>
+            <p className="break-words text-sm text-rose-600 dark:text-rose-400">
+              {error}
+            </p>
 
             <button
               type="button"
               onClick={() => fetchDetections(true)}
-              className="mt-3 text-sm text-teal-300 hover:text-teal-200"
+              className="mt-3 text-sm text-teal-600 hover:text-teal-500 dark:text-teal-300 dark:hover:text-teal-200"
             >
               Try again
             </button>
@@ -173,14 +175,14 @@ function Detections() {
           <div className="px-4 py-10 text-center sm:px-6">
             <ShieldAlert
               size={34}
-              className="mx-auto text-slate-500"
+              className="theme-text-secondary mx-auto"
             />
 
-            <p className="mt-4 font-medium text-slate-200">
+            <p className="theme-text mt-4 font-medium">
               No suspicious activity detected
             </p>
 
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-400">
+            <p className="theme-text-secondary mx-auto mt-2 max-w-md text-sm leading-6">
               No IP addresses currently meet the failed-login
               detection threshold in the last 5 minutes.
             </p>
@@ -188,13 +190,23 @@ function Detections() {
         ) : (
           <div className="w-full overflow-x-auto overscroll-x-contain">
             <table className="w-full min-w-[680px] text-left text-sm">
-              <thead className="bg-white/[0.02]">
-                <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-slate-400">
-                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Source IP</th>
-                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Failed Attempts</th>
-                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">First Seen</th>
-                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Last Seen</th>
-                  <th className="whitespace-nowrap px-4 py-4 sm:px-5">Status</th>
+              <thead className="theme-surface-secondary">
+                <tr className="theme-border border-b text-xs uppercase tracking-wide">
+                  <th className="theme-text-secondary whitespace-nowrap px-4 py-4 sm:px-5">
+                    Source IP
+                  </th>
+                  <th className="theme-text-secondary whitespace-nowrap px-4 py-4 sm:px-5">
+                    Failed Attempts
+                  </th>
+                  <th className="theme-text-secondary whitespace-nowrap px-4 py-4 sm:px-5">
+                    First Seen
+                  </th>
+                  <th className="theme-text-secondary whitespace-nowrap px-4 py-4 sm:px-5">
+                    Last Seen
+                  </th>
+                  <th className="theme-text-secondary whitespace-nowrap px-4 py-4 sm:px-5">
+                    Status
+                  </th>
                 </tr>
               </thead>
 
@@ -202,28 +214,28 @@ function Detections() {
                 {detections.map((detection) => (
                   <tr
                     key={detection.source_ip}
-                    className="border-b border-white/[0.06] transition hover:bg-white/[0.02] last:border-0"
+                    className="theme-border theme-text border-b transition last:border-0 hover:bg-slate-50 dark:hover:bg-white/[0.03]"
                   >
-                    <td className="whitespace-nowrap px-4 py-4 font-mono font-medium text-white sm:px-5">
+                    <td className="whitespace-nowrap px-4 py-4 font-mono font-medium sm:px-5">
                       {detection.source_ip}
                     </td>
 
                     <td className="px-4 py-4 sm:px-5">
-                      <span className="font-semibold text-rose-300">
+                      <span className="font-semibold text-rose-600 dark:text-rose-400">
                         {detection.failed_attempts}
                       </span>
                     </td>
 
-                    <td className="whitespace-nowrap px-4 py-4 text-xs text-slate-400 sm:px-5">
+                    <td className="theme-text-secondary whitespace-nowrap px-4 py-4 text-xs sm:px-5">
                       {new Date(detection.first_seen).toLocaleString()}
                     </td>
 
-                    <td className="whitespace-nowrap px-4 py-4 text-xs text-slate-400 sm:px-5">
+                    <td className="theme-text-secondary whitespace-nowrap px-4 py-4 text-xs sm:px-5">
                       {new Date(detection.last_seen).toLocaleString()}
                     </td>
 
                     <td className="px-4 py-4 sm:px-5">
-                      <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-xs font-medium text-rose-300">
+                      <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1 text-xs font-medium text-rose-700 dark:text-rose-400">
                         <AlertTriangle size={13} />
                         Suspicious
                       </span>
@@ -237,12 +249,12 @@ function Detections() {
       </div>
 
       {/* Detection Rule Information */}
-      <div className="rounded-xl border border-teal-400/10 bg-teal-400/[0.03] p-4 sm:p-5">
-        <p className="text-sm font-medium text-teal-300">
+      <div className="rounded-xl border border-teal-500/20 bg-teal-500/5 p-4 sm:p-5">
+        <p className="text-sm font-medium text-teal-700 dark:text-teal-300">
           Detection Rule
         </p>
 
-        <p className="mt-2 text-sm leading-6 text-slate-400">
+        <p className="theme-text-secondary mt-2 text-sm leading-6">
           An IP address is flagged when it generates 5 or more
           FAILED_LOGIN events within a rolling 5-minute window.
         </p>

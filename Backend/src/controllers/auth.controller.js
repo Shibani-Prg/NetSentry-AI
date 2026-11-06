@@ -32,7 +32,7 @@ async function getCurrentUser(req, res, next) {
   try {
     const result = await pool.query(
       `SELECT id, name, email, role
-       FROM users
+       FROM public.users
        WHERE id = $1 AND is_active = TRUE
        LIMIT 1`,
       [req.user.userId]

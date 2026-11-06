@@ -8,7 +8,7 @@ async function loginAdmin(email, password) {
   // Find admin by email
   const result = await pool.query(
     `SELECT id, name, email, password_hash, role, is_active
-     FROM users
+     FROM public.users
      WHERE email = LOWER($1)
      LIMIT 1`,
     [email]
@@ -67,7 +67,7 @@ async function registerAdmin({ name, email, password }) {
 
   // Check duplicate email
   const existingUser = await pool.query(
-    `SELECT id FROM users
+    `SELECT id FROM public.users
      WHERE LOWER(email) = $1
      LIMIT 1`,
     [normalizedEmail]
@@ -84,7 +84,7 @@ async function registerAdmin({ name, email, password }) {
 
   // Create admin
   const result = await pool.query(
-    `INSERT INTO users
+    `INSERT INTO public.users
       (name, email, password_hash, role, is_active)
      VALUES ($1, $2, $3, 'admin', TRUE)
      RETURNING id, name, email, role, is_active, created_at`,

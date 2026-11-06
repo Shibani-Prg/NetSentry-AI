@@ -24,7 +24,7 @@ async function authenticateToken(req, res, next) {
 
     const result = await pool.query(
       `SELECT id, name, email, role, is_active
-       FROM users
+       FROM public.users
        WHERE id = $1
        LIMIT 1`,
       [decoded.userId]

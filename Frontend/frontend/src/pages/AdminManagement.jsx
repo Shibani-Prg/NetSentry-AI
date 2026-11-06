@@ -131,7 +131,7 @@ export default function AdminManagement() {
   };
 
   return (
-    <div className="min-h-screen space-y-6 bg-[#0b1220] p-6">
+    <div className="theme-bg theme-text min-h-screen space-y-6 p-6">
       <AdminHeader onCreateAdmin={openCreateModal} />
 
       {success && (

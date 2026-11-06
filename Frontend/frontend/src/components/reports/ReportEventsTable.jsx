@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 function formatDate(value) {
   if (!value) return "—";
 
@@ -8,8 +11,24 @@ function formatDate(value) {
   return date.toLocaleString();
 }
 
+const PAGE_SIZE = 10;
+
 function ReportEventsTable({ events = [] }) {
-  const recentEvents = events.slice(0, 10);
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(events.length / PAGE_SIZE)
+  );
+
+  const currentPage = Math.min(page, totalPages);
+
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+
+  const recentEvents = events.slice(
+    startIndex,
+    startIndex + PAGE_SIZE
+  );
 
   function severityClass(severity) {
     switch (String(severity || "").toUpperCase()) {
@@ -51,52 +70,95 @@ function ReportEventsTable({ events = [] }) {
           </p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[700px] text-left text-sm">
-            <thead className="theme-surface-secondary theme-text-secondary text-xs uppercase tracking-wider">
-              <tr>
-                <th className="px-5 py-4 font-medium">Time</th>
-                <th className="px-5 py-4 font-medium">Source IP</th>
-                <th className="px-5 py-4 font-medium">Event Type</th>
-                <th className="px-5 py-4 font-medium">Severity</th>
-                <th className="px-5 py-4 font-medium">Source</th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y theme-border">
-              {recentEvents.map((event) => (
-                <tr
-                  key={event.id}
-                  className="transition hover:bg-slate-100 dark:hover:bg-white/[0.02]"
-                >
-                  <td className="theme-text-secondary whitespace-nowrap px-5 py-4">
-                    {formatDate(event.created_at)}
-                  </td>
-
-                  <td className="theme-text px-5 py-4 font-mono">
-                    {event.source_ip || "—"}
-                  </td>
-
-                  <td className="theme-text px-5 py-4">
-                    {event.event_type || "—"}
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <span
-                      className={`rounded-md px-2 py-1 text-xs font-medium ${severityClass(event.severity)}`}
-                    >
-                      {event.severity || "UNKNOWN"}
-                    </span>
-                  </td>
-
-                  <td className="theme-text-secondary px-5 py-4">
-                    {event.source_name || "Unknown source"}
-                  </td>
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px] text-left text-sm">
+              <thead className="theme-surface-secondary theme-text-secondary text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="px-5 py-4 font-medium">Time</th>
+                  <th className="px-5 py-4 font-medium">Source IP</th>
+                  <th className="px-5 py-4 font-medium">Event Type</th>
+                  <th className="px-5 py-4 font-medium">Severity</th>
+                  <th className="px-5 py-4 font-medium">Source</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+
+              <tbody className="divide-y divide-slate-200 dark:divide-white/[0.06]">
+                {recentEvents.map((event) => (
+                  <tr
+                    key={event.id}
+                    className="transition hover:bg-slate-100 dark:hover:bg-white/[0.02]"
+                  >
+                    <td className="theme-text-secondary whitespace-nowrap px-5 py-4">
+                      {formatDate(event.created_at)}
+                    </td>
+
+                    <td className="theme-text px-5 py-4 font-mono">
+                      {event.source_ip || "—"}
+                    </td>
+
+                    <td className="theme-text px-5 py-4">
+                      {event.event_type || "—"}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <span
+                        className={`rounded-md px-2 py-1 text-xs font-medium ${severityClass(event.severity)}`}
+                      >
+                        {event.severity || "UNKNOWN"}
+                      </span>
+                    </td>
+
+                    <td className="theme-text-secondary px-5 py-4">
+                      {event.source_name || "Unknown source"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="theme-border flex flex-wrap items-center justify-between gap-3 border-t px-4 py-4 sm:px-5">
+            <p className="theme-text-secondary text-xs">
+              Showing {startIndex + 1}–
+              {Math.min(startIndex + PAGE_SIZE, events.length)} of{" "}
+              {events.length} records
+            </p>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={currentPage <= 1}
+                onClick={() =>
+                  setPage((prev) => Math.max(1, prev - 1))
+                }
+                className="theme-border theme-text-secondary rounded-lg border p-2 transition hover:bg-black/5 dark:hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label="Previous page"
+              >
+                <ChevronLeft size={16} />
+              </button>
+
+              <span className="theme-text-secondary px-2 text-xs">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                type="button"
+                disabled={currentPage >= totalPages}
+                onClick={() =>
+                  setPage((prev) =>
+                    Math.min(totalPages, prev + 1)
+                  )
+                }
+                className="theme-border theme-text-secondary rounded-lg border p-2 transition hover:bg-black/5 dark:hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label="Next page"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
